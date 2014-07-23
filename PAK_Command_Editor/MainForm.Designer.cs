@@ -165,6 +165,7 @@
             this.loadMacrosToDeviceMenuItem.Name = "loadMacrosToDeviceMenuItem";
             this.loadMacrosToDeviceMenuItem.Size = new System.Drawing.Size(172, 22);
             this.loadMacrosToDeviceMenuItem.Text = "Загрузить макрос";
+            this.loadMacrosToDeviceMenuItem.Click += new System.EventHandler(this.loadMacrosToDeviceMenuItem_Click);
             // 
             // настройкаToolStripMenuItem
             // 

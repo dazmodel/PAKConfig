@@ -83,6 +83,7 @@
             // txtGlobalVarAlias
             // 
             this.txtGlobalVarAlias.Location = new System.Drawing.Point(84, 19);
+            this.txtGlobalVarAlias.MaxLength = 4;
             this.txtGlobalVarAlias.Name = "txtGlobalVarAlias";
             this.txtGlobalVarAlias.Size = new System.Drawing.Size(100, 20);
             this.txtGlobalVarAlias.TabIndex = 1;

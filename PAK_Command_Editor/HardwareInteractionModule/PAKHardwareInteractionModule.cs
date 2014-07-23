@@ -1,4 +1,7 @@
-﻿using PAK_Command_Editor.CustomEventArgs;
+﻿using NHibernate.Mapping;
+using PAK_Command_Editor.CustomEventArgs;
+using PAK_Command_Editor.Entities;
+using PAK_Command_Editor.MacrosEditor;
 using PAK_Command_Editor.Settings;
 using System;
 using System.Collections.Generic;
@@ -22,6 +25,24 @@ namespace PAK_Command_Editor.HardwareInteractionModule
             this._comPort = new SerialPort(PAKSettingsManager.Settings.COMPortName, PAKSettingsManager.Settings.COMPortBandwidth);
         }
 
+        public void SendSignalToDevice(Signal signal)
+        {
+            List<byte> bytesToSend = new List<byte>();            
+            bytesToSend.AddRange(this.StringToByteArray(PAKSettingsManager.Settings.WriteSignalCommand));
+            byte[] signalHex = this.StringToByteArray(signal.HexCode);
+            bytesToSend.AddRange(this.IntToByteArray(signalHex.Length));
+            bytesToSend.AddRange(signalHex);
+            this.SendData(bytesToSend.ToArray());
+        }
+
+        public void SendMacrosToDevice(MacrosesContainer macrosesContainer)
+        {
+            List<byte> bytesToSend = new List<byte>();
+            bytesToSend.AddRange(this.StringToByteArray(PAKSettingsManager.Settings.WriteMacrosCommand));
+
+            this.SendData(bytesToSend.ToArray());
+        }
+
         public String SendData(String data)
         {
             try
@@ -29,8 +50,25 @@ namespace PAK_Command_Editor.HardwareInteractionModule
                 if (this._comPort.IsOpen == false) //if not open, open the port
                     this._comPort.Open();             
 
-                this._comPort.Write(data);           
+                this._comPort.WriteLine(data);
+                this._comPort.Close();
+                return String.Format(DATA_SENT_SUCCESSFULLY_NO_WAIT, PAKSettingsManager.Settings.COMPortName);
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
 
+        public String SendData(byte[] byteData)
+        {
+            try
+            {
+                if (this._comPort.IsOpen == false) //if not open, open the port
+                    this._comPort.Open();
+
+                this._comPort.Write(byteData, 0, byteData.Length);
+                this._comPort.Close();
                 return String.Format(DATA_SENT_SUCCESSFULLY_NO_WAIT, PAKSettingsManager.Settings.COMPortName);
             }
             catch (Exception e)
@@ -77,13 +115,23 @@ namespace PAK_Command_Editor.HardwareInteractionModule
 
         #region Utilities
 
-        private byte[] StringToByteArray(String hex)
+        private byte[] IntToByteArray(Int32 intValue)
         {
-            int NumberChars = hex.Length;
-            byte[] bytes = new byte[NumberChars / 2];
-            for (int i = 0; i < NumberChars; i += 2)
-                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
-            return bytes;
+            byte[] intBytes = BitConverter.GetBytes(intValue);
+            if (BitConverter.IsLittleEndian)
+                System.Array.Reverse(intBytes);
+            return intBytes;
+        }
+
+        private byte[] StringToByteArray(String hex)
+        {            
+            List<String> strBytes = hex.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+            return strBytes.Select(x => Convert.ToByte(x.Substring(2, 2), 16)).ToArray();            
+        }
+
+        private byte[] StringToASCIIByteCodesArray(String value)
+        {
+            return Encoding.ASCII.GetBytes(value);
         }
 
         #endregion

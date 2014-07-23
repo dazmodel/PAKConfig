@@ -95,6 +95,11 @@ namespace PAK_Command_Editor
             this._macrosesEditor = macrosEditor;
         }
 
+        private void loadMacrosToDeviceMenuItem_Click(object sender, EventArgs e)
+        {
+            this._macrosesEditor.SendMacrosToDevice();
+        }
+
         #endregion
 
         #region Macroses Editor Event Handlers
@@ -139,6 +144,6 @@ namespace PAK_Command_Editor
             this._macrosesEditor.SaveMacros(this.dlgExportMacros.FileName);
         }
 
-        #endregion                    
+        #endregion                            
     }
 }

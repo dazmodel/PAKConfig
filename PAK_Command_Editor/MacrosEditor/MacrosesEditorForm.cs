@@ -26,7 +26,7 @@ namespace PAK_Command_Editor.MacrosEditor
         private static readonly String MACROS_EXPORTED_SUCCESFULLY = "Текущий макрос успешно сохранен в файл \r\n{0}";
         private static readonly String SEND_PARAMS_TEMPLATE = "Сигнал: {0}, Адресат: {1}";
         private static readonly String CANCEL_WRN_CAPTION = "Закрытие редактора макросов";
-        private static readonly String CANCEL_WARNING = "Все изменения будут потеряны. Закрыть редактор?";
+        private static readonly String CANCEL_WARNING = "Все несохраненные изменения будут потеряны. Закрыть редактор?";
         private ISession _dataSession;
         private IRepository<Signal> _signalsRepo;
         private IRepository<MacrosCommand> _macrosCommandRepo;
@@ -61,6 +61,46 @@ namespace PAK_Command_Editor.MacrosEditor
             this._signalsRepo = new Repository<Signal>(this._dataSession);
             this._macrosCommandRepo = new Repository<MacrosCommand>(this._dataSession);            
         }
+
+        #region Public Methods
+
+        public void BindMacroses(ResultEntityEventArgs args)
+        {
+            MacrosCommand baseCommand = this._macrosCommandRepo.Get(x => x.Alias == args.CommandType.ToString()).SingleOrDefault();
+            MacrosCommandWithParams command = new MacrosCommandWithParams(baseCommand);
+            command.Params = args.Params;
+
+            this._macrosesContainer.Commands.Add(command);
+            this.BindMacrosesGrid();
+        }
+
+        public void SaveMacros(String fileName)
+        {
+            String result = String.Empty;
+
+            try
+            {
+                this._macrosesContainer.SaveToFile(fileName);
+                result = String.Format(MACROS_EXPORTED_SUCCESFULLY, fileName);
+            }
+            catch (Exception e)
+            {
+                result = e.Message;
+            }
+
+            MessageBox.Show(result);
+        }
+
+        public void SendMacrosToDevice()
+        {
+            if (this.MacrosConfigured)
+            {
+                this._hwModule.SendSignalToDevice(this.cbSelectSignal.SelectedItem as Signal);
+                this._hwModule.SendMacrosToDevice(this._macrosesContainer);
+            }
+        }
+
+        #endregion
 
         #region Buttons Event Handlers
 
@@ -233,34 +273,7 @@ namespace PAK_Command_Editor.MacrosEditor
 
             this.cbSelectSignal.Items.Add(new { Name = SELECT_TEXT, Id = -1 });
             this.cbSelectSignal.Items.AddRange(this._signalsRepo.GetAll().ToArray());
-        }
-
-        public void BindMacroses(ResultEntityEventArgs args)
-        {
-            MacrosCommand baseCommand = this._macrosCommandRepo.Get(x => x.Alias == args.CommandType.ToString()).SingleOrDefault();
-            MacrosCommandWithParams command = new MacrosCommandWithParams(baseCommand);
-            command.Params = args.Params;
-
-            this._macrosesContainer.Commands.Add(command);
-            this.BindMacrosesGrid();
-        }
-
-        public void SaveMacros(String fileName)
-        {
-            String result = String.Empty;
-
-            try
-            {
-                this._macrosesContainer.SaveToFile(fileName);
-                result = String.Format(MACROS_EXPORTED_SUCCESFULLY, fileName);
-            }
-            catch (Exception e)
-            {
-                result = e.Message;
-            }
-
-            MessageBox.Show(result);
-        }
+        }        
 
         private void BindMacrosesGrid()
         {
