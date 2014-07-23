@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B3F82801-16CB-4A0D-950E-5FD3161B2AB3}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PAK_Command_Editor</RootNamespace>
+    <AssemblyName>PAK_Command_Editor</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Control Panel and Administrative Tools.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.3.3.1.4000\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.93.0\lib\net20\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CustomEventArgs\ComPortDataEventArgs.cs" />
+    <Compile Include="Entities\Device.cs" />
+    <Compile Include="Entities\MacrosCommand.cs" />
+    <Compile Include="Entities\PredefinedGlobalVar.cs" />
+    <Compile Include="Entities\Signal.cs" />
+    <Compile Include="Entities\Vendor.cs" />
+    <Compile Include="CustomEventArgs\ResultEntityEventArgs.cs" />
+    <Compile Include="HardwareInteractionModule\COMTimer.cs" />
+    <Compile Include="HardwareInteractionModule\PAKHardwareInteractionModule.cs" />
+    <Compile Include="MacrosEditor\AddDelayCommandForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosEditor\AddDelayCommandForm.Designer.cs">
+      <DependentUpon>AddDelayCommandForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MacrosEditor\AddGlobalVarForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosEditor\AddGlobalVarForm.Designer.cs">
+      <DependentUpon>AddGlobalVarForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MacrosEditor\AddIfCommandForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosEditor\AddIfCommandForm.Designer.cs">
+      <DependentUpon>AddIfCommandForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MacrosEditor\AddSendCommandForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosEditor\AddSendCommandForm.Designer.cs">
+      <DependentUpon>AddSendCommandForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MacrosEditor\AddSetResetCommandForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosEditor\AddSetResetCommandForm.Designer.cs">
+      <DependentUpon>AddSetResetCommandForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MacrosEditor\GlobalVariable.cs" />
+    <Compile Include="MacrosEditor\GlobalVariablesStorage.cs" />
+    <Compile Include="MacrosEditor\MacrosCommandType.cs" />
+    <Compile Include="MacrosEditor\MacrosCommandWithParams.cs" />
+    <Compile Include="MacrosEditor\MacrosesContainer.cs" />
+    <Compile Include="MacrosEditor\MacrosesEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosEditor\MacrosesEditorForm.Designer.cs">
+      <DependentUpon>MacrosesEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MacrosEditor\MacrosesViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosEditor\MacrosesViewForm.Designer.cs">
+      <DependentUpon>MacrosesViewForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MacrosEditor\SelectCommandTypeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosEditor\SelectCommandTypeForm.Designer.cs">
+      <DependentUpon>SelectCommandTypeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Mappings\DeviceMap.cs" />
+    <Compile Include="Mappings\MacrosCommandMap.cs" />
+    <Compile Include="Mappings\PredefinedGlobalVarMap.cs" />
+    <Compile Include="Mappings\SignalMap.cs" />
+    <Compile Include="Mappings\VendorMap.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\IRepository.cs" />
+    <Compile Include="Repository\PAKDataSessionFactory.cs" />
+    <Compile Include="Repository\Repository.cs" />
+    <Compile Include="Settings\COMPortSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings\COMPortSettingsForm.Designer.cs">
+      <DependentUpon>COMPortSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\DataBaseLocationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings\DataBaseLocationForm.Designer.cs">
+      <DependentUpon>DataBaseLocationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\PAKSettings.cs" />
+    <Compile Include="Settings\PAKSettingsManager.cs" />
+    <Compile Include="Settings\ServiceCommandsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings\ServiceCommandsForm.Designer.cs">
+      <DependentUpon>ServiceCommandsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SignalsCatalog\AddSignalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SignalsCatalog\AddSignalForm.Designer.cs">
+      <DependentUpon>AddSignalForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SignalsCatalog\AddVendorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SignalsCatalog\AddVendorForm.Designer.cs">
+      <DependentUpon>AddVendorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SignalsCatalog\AddDeviceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SignalsCatalog\AddDeviceForm.Designer.cs">
+      <DependentUpon>AddDeviceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SignalsCatalog\EditSignalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SignalsCatalog\EditSignalForm.Designer.cs">
+      <DependentUpon>EditSignalForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SignalsCatalog\SignalsCatalogViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SignalsCatalog\SignalsCatalogViewForm.Designer.cs">
+      <DependentUpon>SignalsCatalogViewForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SignalsCatalog\SignalViewEntity.cs" />
+    <EmbeddedResource Include="MacrosEditor\AddDelayCommandForm.resx">
+      <DependentUpon>AddDelayCommandForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MacrosEditor\AddGlobalVarForm.resx">
+      <DependentUpon>AddGlobalVarForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MacrosEditor\AddIfCommandForm.resx">
+      <DependentUpon>AddIfCommandForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MacrosEditor\AddSendCommandForm.resx">
+      <DependentUpon>AddSendCommandForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MacrosEditor\AddSetResetCommandForm.resx">
+      <DependentUpon>AddSetResetCommandForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MacrosEditor\MacrosesEditorForm.resx">
+      <DependentUpon>MacrosesEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MacrosEditor\MacrosesViewForm.resx">
+      <DependentUpon>MacrosesViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MacrosEditor\SelectCommandTypeForm.resx">
+      <DependentUpon>SelectCommandTypeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Settings\COMPortSettingsForm.resx">
+      <DependentUpon>COMPortSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings\DataBaseLocationForm.resx">
+      <DependentUpon>DataBaseLocationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings\ServiceCommandsForm.resx">
+      <DependentUpon>ServiceCommandsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SignalsCatalog\AddSignalForm.resx">
+      <DependentUpon>AddSignalForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SignalsCatalog\AddVendorForm.resx">
+      <DependentUpon>AddVendorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SignalsCatalog\AddDeviceForm.resx">
+      <DependentUpon>AddDeviceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SignalsCatalog\EditSignalForm.resx">
+      <DependentUpon>EditSignalForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SignalsCatalog\SignalsCatalogViewForm.resx">
+      <DependentUpon>SignalsCatalogViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Control Panel and Administrative Tools.ico" />
+    <Content Include="x64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
