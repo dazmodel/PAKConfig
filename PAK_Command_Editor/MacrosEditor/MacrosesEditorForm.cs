@@ -28,11 +28,16 @@ namespace PAK_Command_Editor.MacrosEditor
         private static readonly String CANCEL_WRN_CAPTION = "Закрытие редактора макросов";
         private static readonly String CANCEL_WARNING = "Все несохраненные изменения будут потеряны. Закрыть редактор?";
         private ISession _dataSession;
+        private IRepository<Vendor> _vendorsRepo;
+        private IRepository<Device> _devsRepo;
         private IRepository<Signal> _signalsRepo;
         private IRepository<MacrosCommand> _macrosCommandRepo;
         private Int32 _rowIndex;
         private MacrosesContainer _macrosesContainer;
         private PAKHardwareInteractionModule _hwModule;
+
+        private Vendor _currentVendor;
+        private Device _currentDevice;
 
         private int _prevWidth;
         private FormWindowState _prevWindowState;
@@ -58,6 +63,8 @@ namespace PAK_Command_Editor.MacrosEditor
             this._prevWindowState = this.WindowState;
             this._hwModule = new PAKHardwareInteractionModule();
             this._dataSession = PAKDataSessionFactory.GetSession();
+            this._vendorsRepo = new Repository<Vendor>(this._dataSession);
+            this._devsRepo = new Repository<Device>(this._dataSession);
             this._signalsRepo = new Repository<Signal>(this._dataSession);
             this._macrosCommandRepo = new Repository<MacrosCommand>(this._dataSession);            
         }
@@ -146,9 +153,17 @@ namespace PAK_Command_Editor.MacrosEditor
                 this._hwModule.SendDataAndWait(PAKSettingsManager.Settings.ReadSignalCommand);
             }
 
-            this.BindSignals();
-            this.cbSelectSignal.SelectedIndex = 0;
+            this.ConfigureControls();
+            this.BindVendors();
+            this.cbVendors.SelectedIndex = 0;
+
             this.InitMacrosesContainer();
+
+            if (this._macrosesContainer.AssociatedSignal != null)
+            {
+                this.RestoreState();
+            }
+
             this.BindMacrosesGrid();
         }        
 
@@ -217,6 +232,38 @@ namespace PAK_Command_Editor.MacrosEditor
 
         #region Comboboxes Event Handlers
 
+        private void cbVendors_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Boolean enabled = this.cbVendors.SelectedIndex > 0;
+
+            this.lblDeviceModel.Enabled =
+                this.cbDeviceModels.Enabled = enabled;
+
+            this._currentVendor = this.cbVendors.SelectedItem as Vendor;
+
+            if (enabled)
+            {
+                this.BindDevices();
+                this.cbDeviceModels.SelectedIndex = 0;
+            }
+        }
+
+        private void cbDeviceModels_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Boolean enabled = this.cbDeviceModels.SelectedIndex > 0;
+
+            this.lblSignal.Enabled =
+                this.cbSelectSignal.Enabled = this.btnAddSignal.Enabled = enabled;
+
+            this._currentDevice = this.cbDeviceModels.SelectedItem as Device;
+
+            if (enabled)
+            {
+                this.BindSignals();
+                this.cbSelectSignal.SelectedIndex = 0;
+            }
+        }
+
         private void cbSelectSignal_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.cbSelectSignal.SelectedItem is Signal)
@@ -241,16 +288,48 @@ namespace PAK_Command_Editor.MacrosEditor
 
         #region Utilities
 
+        private void ConfigureControls()
+        {
+            this.cbVendors.DisplayMember = "Name";
+            this.cbVendors.ValueMember = "Id";
+
+            this.cbDeviceModels.DisplayMember = "Name";
+            this.cbDeviceModels.ValueMember = "Id";
+
+            this.cbSelectSignal.DisplayMember = "Name";
+            this.cbSelectSignal.ValueMember = "Id";
+        }
+
+        private void BindVendors()
+        {
+            this.cbVendors.Items.Clear();
+            this.cbVendors.Items.Add(new { Name = SELECT_TEXT, Id = -1 });
+            this.cbVendors.Items.AddRange(this._vendorsRepo.GetAll().ToArray());
+        }
+
+        private void BindDevices()
+        {
+            this.cbDeviceModels.Items.Clear();
+            this.cbDeviceModels.Items.Add(new { Name = SELECT_TEXT, Id = -1 });
+            Device[] devices = this._devsRepo.Get(x => x.Vendor.Id == this._currentVendor.Id).ToArray();
+            this.cbDeviceModels.Items.AddRange(devices);
+        }
+
+        private void BindSignals()
+        {
+            this.cbSelectSignal.Items.Clear();
+
+            this.cbSelectSignal.Items.Add(new { Name = SELECT_TEXT, Id = -1 });
+            this.cbSelectSignal.Items.AddRange(this._signalsRepo.Get(x => x.Device.Id == this._currentDevice.Id).ToArray());
+        }  
+
         private void InitMacrosesContainer()
         {
             if (!String.IsNullOrEmpty(this.MacrosFileName))
             {
                 try
                 {
-                    this._macrosesContainer = MacrosesContainer.GetFromFile(this.MacrosFileName);
-                    Signal signal = this.cbSelectSignal.Items.OfType<Signal>().Where(x => x.Id == this._macrosesContainer.AssociatedSignal.Id).SingleOrDefault();
-                    Int32 index = this.cbSelectSignal.Items.IndexOf(signal);
-                    this.cbSelectSignal.SelectedIndex = index;
+                    this._macrosesContainer = MacrosesContainer.GetFromFile(this.MacrosFileName);                    
                 }
                 catch (Exception e)
                 {
@@ -264,16 +343,13 @@ namespace PAK_Command_Editor.MacrosEditor
             }
         }
 
-        private void BindSignals()
+        private void RestoreState()
         {
-            this.cbSelectSignal.DisplayMember = "Name";
-            this.cbSelectSignal.ValueMember = "Id";
-
-            this.cbSelectSignal.Items.Clear();
-
-            this.cbSelectSignal.Items.Add(new { Name = SELECT_TEXT, Id = -1 });
-            this.cbSelectSignal.Items.AddRange(this._signalsRepo.GetAll().ToArray());
-        }        
+            Signal currentSignal = this._signalsRepo.Get(x => x.HexCodeHash == this._macrosesContainer.AssociatedSignal.HexCodeHash).SingleOrDefault();
+            this.cbVendors.SelectedItem = currentSignal.Device.Vendor;
+            this.cbDeviceModels.SelectedItem = currentSignal.Device;
+            this.cbSelectSignal.SelectedItem = currentSignal;
+        }
 
         private void BindMacrosesGrid()
         {
@@ -352,7 +428,6 @@ namespace PAK_Command_Editor.MacrosEditor
             }
         }
 
-        #endregion       
-                       
+        #endregion                    
     }
 }

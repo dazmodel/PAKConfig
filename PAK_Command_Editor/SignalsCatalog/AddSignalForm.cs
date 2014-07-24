@@ -14,9 +14,9 @@ namespace PAK_Command_Editor.SignalsCatalog
     public partial class AddSignalForm : Form
     {
         private ISession _dataSession;
-        private IRepository<Vendor> _vendorsRepo;
-        private IRepository<Signal> _signalsRepo;
+        private IRepository<Vendor> _vendorsRepo;        
         private IRepository<Device> _devsRepo;
+        private IRepository<Signal> _signalsRepo;
         private PAKHardwareInteractionModule _hwModule;
         private static readonly String SELECT_TEXT = "Выберите...";
         private static readonly String NEW_SIGNAL_ADDED_MSG = "Сигнал {0} успешно добавлен.";
@@ -33,9 +33,9 @@ namespace PAK_Command_Editor.SignalsCatalog
             InitializeComponent();
             this._hwModule = new PAKHardwareInteractionModule();
             this._dataSession = PAKDataSessionFactory.GetSession();
-            this._vendorsRepo = new Repository<Vendor>(this._dataSession);
-            this._signalsRepo = new Repository<Signal>(this._dataSession);
+            this._vendorsRepo = new Repository<Vendor>(this._dataSession);            
             this._devsRepo = new Repository<Device>(this._dataSession);
+            this._signalsRepo = new Repository<Signal>(this._dataSession);
         }
 
         #region AddSignalForm Event Handlers
