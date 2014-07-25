@@ -20,7 +20,7 @@ namespace PAK_Command_Editor.MacrosEditor
         private IRepository<Vendor> _vendorsRepo;
         private IRepository<Device> _devsRepo;        
         private IRepository<Signal> _signalRepo;
-        private IRepository<PredefinedGlobalVar> _pgvRepo;
+        private IRepository<GlobalVariable> _pgvRepo;
         private static readonly String SELECT_TEXT = "Выберите...";
         private MacrosesEditorForm _editor;
 
@@ -34,7 +34,7 @@ namespace PAK_Command_Editor.MacrosEditor
             this._vendorsRepo = new Repository<Vendor>(this._dataSession);
             this._devsRepo = new Repository<Device>(this._dataSession);
             this._signalRepo = new Repository<Signal>(this._dataSession);
-            this._pgvRepo = new Repository<PredefinedGlobalVar>(this._dataSession);
+            this._pgvRepo = new Repository<GlobalVariable>(this._dataSession);
             this._editor = editor;
         }
 

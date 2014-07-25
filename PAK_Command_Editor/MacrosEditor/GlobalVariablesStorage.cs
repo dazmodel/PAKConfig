@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PAK_Command_Editor.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace PAK_Command_Editor.MacrosEditor
 
         public static void AddByName(String name, Boolean value)
         {
-            uint index = GlobalVars.Count == 0 ? _startNumber : GlobalVars.Max(x => HexFromString(x.HexCode));
+            uint index = GlobalVars.Count == 0 ? _startNumber : GlobalVars.Max(x => HexFromString(x.HexCode[1]));
             GlobalVars.Add(new GlobalVariable() { Alias = name, Value = value, HexCode = StringFromHex(index) });
         }
 

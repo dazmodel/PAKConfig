@@ -62,7 +62,7 @@ namespace PAK_Command_Editor.Repository
         private static AutoPersistenceModel CreateMappings()
         {
             return AutoMap
-                .Assembly(Assembly.GetAssembly(typeof(PAKDataSessionFactory)))
+                .Assembly(Assembly.GetAssembly(typeof(PAKDataSessionFactory)), new PAKAutoMappingConfig())
                 .Where(t => t.Namespace != null && t.Namespace.Equals("PAK_Command_Editor.Entities"))
                 .Conventions.Setup(c => c.Add(DefaultCascade.SaveUpdate()));
         }

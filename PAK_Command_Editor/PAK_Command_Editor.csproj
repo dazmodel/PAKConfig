@@ -81,7 +81,7 @@
     <Compile Include="CustomEventArgs\ComPortDataEventArgs.cs" />
     <Compile Include="Entities\Device.cs" />
     <Compile Include="Entities\MacrosCommand.cs" />
-    <Compile Include="Entities\PredefinedGlobalVar.cs" />
+    <Compile Include="Entities\GlobalVariable.cs" />
     <Compile Include="Entities\Signal.cs" />
     <Compile Include="Entities\Vendor.cs" />
     <Compile Include="CustomEventArgs\ResultEntityEventArgs.cs" />
@@ -117,7 +117,6 @@
     <Compile Include="MacrosEditor\AddSetResetCommandForm.Designer.cs">
       <DependentUpon>AddSetResetCommandForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MacrosEditor\GlobalVariable.cs" />
     <Compile Include="MacrosEditor\GlobalVariablesStorage.cs" />
     <Compile Include="MacrosEditor\MacrosCommandType.cs" />
     <Compile Include="MacrosEditor\MacrosCommandWithParams.cs" />
@@ -146,14 +145,10 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Mappings\DeviceMap.cs" />
-    <Compile Include="Mappings\MacrosCommandMap.cs" />
-    <Compile Include="Mappings\PredefinedGlobalVarMap.cs" />
-    <Compile Include="Mappings\SignalMap.cs" />
-    <Compile Include="Mappings\VendorMap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\IRepository.cs" />
+    <Compile Include="Repository\PAKAutoMappingConfig.cs" />
     <Compile Include="Repository\PAKDataSessionFactory.cs" />
     <Compile Include="Repository\Repository.cs" />
     <Compile Include="Settings\COMPortSettingsForm.cs">
