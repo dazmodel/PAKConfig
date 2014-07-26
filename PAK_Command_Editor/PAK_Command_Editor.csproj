@@ -119,7 +119,6 @@
     </Compile>
     <Compile Include="MacrosEditor\GlobalVariablesStorage.cs" />
     <Compile Include="MacrosEditor\MacrosCommandType.cs" />
-    <Compile Include="MacrosEditor\MacrosCommandWithParams.cs" />
     <Compile Include="MacrosEditor\MacrosesContainer.cs" />
     <Compile Include="MacrosEditor\MacrosesEditorForm.cs">
       <SubType>Form</SubType>

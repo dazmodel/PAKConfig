@@ -41,6 +41,8 @@ namespace PAK_Command_Editor.HardwareInteractionModule
             List<byte> bytesToSend = new List<byte>();
             bytesToSend.AddRange(PAKConversionUtilities.StringToByteArray(PAKSettingsManager.Settings.WriteMacrosCommand));
 
+            
+
             this.SendData(bytesToSend.ToArray());
         }
 

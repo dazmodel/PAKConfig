@@ -73,8 +73,7 @@ namespace PAK_Command_Editor.MacrosEditor
 
         public void BindMacroses(ResultEntityEventArgs args)
         {
-            MacrosCommand baseCommand = this._macrosCommandRepo.Get(x => x.Alias == args.CommandType.ToString()).SingleOrDefault();
-            MacrosCommandWithParams command = new MacrosCommandWithParams(baseCommand);
+            MacrosCommand command = this._macrosCommandRepo.Get(x => x.Alias == args.CommandType.ToString()).SingleOrDefault();            
             command.Params = args.Params;
 
             this._macrosesContainer.Commands.Add(command);
@@ -414,7 +413,7 @@ namespace PAK_Command_Editor.MacrosEditor
             prevWidth = dataGrid.Width;
         }
 
-        private String GetParamsString(MacrosCommandWithParams command)
+        private String GetParamsString(MacrosCommand command)
         {
             MacrosCommandType commandType = (MacrosCommandType)Enum.Parse(typeof(MacrosCommandType), command.Alias);
 

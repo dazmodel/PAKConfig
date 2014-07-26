@@ -12,11 +12,11 @@ namespace PAK_Command_Editor.MacrosEditor
     public class MacrosesContainer
     {
         public Signal AssociatedSignal { get; set; }
-        public List<MacrosCommandWithParams> Commands { get; set; }
+        public List<MacrosCommand> Commands { get; set; }
 
         public MacrosesContainer()
         {
-            this.Commands = new List<MacrosCommandWithParams>();
+            this.Commands = new List<MacrosCommand>();
         }
 
         public void SaveToFile(String fileName)

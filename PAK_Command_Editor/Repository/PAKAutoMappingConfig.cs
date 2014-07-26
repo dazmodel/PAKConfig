@@ -9,7 +9,7 @@ namespace PAK_Command_Editor.Repository
 {
     public class PAKAutoMappingConfig : DefaultAutomappingConfiguration
     {
-        private static readonly IList<String> IgnoredMembers = new List<String> { "Value" };
+        private static readonly IList<String> IgnoredMembers = new List<String> { "Value", "Params" };
         private static readonly String NamespaceToMap = "PAK_Command_Editor.Entities";
 
         public override bool ShouldMap(Type type)

@@ -22,6 +22,7 @@ namespace PAK_Command_Editor.SignalsCatalog
         private static readonly String NEW_SIGNAL_ADDED_MSG = "Сигнал {0} успешно добавлен.";
         private static readonly String COM_MSG_PATTERN = "{0} {1}\r\n";
         private static readonly String ERROR = "Ошибка";
+        private static readonly Int32 MIN_HEX_LENGTH = 26;
         private Vendor _currentVendor;
         private Device _currentDevice;
         
@@ -162,9 +163,9 @@ namespace PAK_Command_Editor.SignalsCatalog
         private void txtHexCode_TextChanged(object sender, EventArgs e)
         {
             this.btnAddSignal.Enabled = (!String.IsNullOrEmpty(this.txtSignalName.Text)) &&
-                                        (!String.IsNullOrEmpty(this.txtHexCode.Text));
+                                        (this.txtHexCode.Text.Length >= MIN_HEX_LENGTH);
 
-            this.btnTestSignal.Enabled = !String.IsNullOrEmpty(this.txtHexCode.Text);
+            this.btnTestSignal.Enabled = this.txtHexCode.Text.Length >= MIN_HEX_LENGTH;
         }
 
         private void txtHexCode_KeyDown(object sender, KeyEventArgs e)
