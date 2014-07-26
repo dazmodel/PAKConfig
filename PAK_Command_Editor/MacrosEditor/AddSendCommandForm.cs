@@ -90,7 +90,7 @@ namespace PAK_Command_Editor.MacrosEditor
         {
             ResultEntityEventArgs commandArgs = new ResultEntityEventArgs();
             commandArgs.CommandType = MacrosCommandType.SEND;
-            commandArgs.Params = new List<String>() { (this.cbSelectSignal.SelectedItem as Signal).Id.ToString(), this.cbSelectTarget.SelectedItem.ToString() };
+            commandArgs.Params = new List<String>() { (this.cbSelectSignal.SelectedItem as Signal).HexCodeHash, this.cbSelectTarget.SelectedItem.ToString() };
             this._editor.BindMacroses(commandArgs);
 
             this.Close();

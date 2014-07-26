@@ -24,26 +24,12 @@ namespace PAK_Command_Editor.HardwareInteractionModule
         public PAKHardwareInteractionModule()
         {
             this._comPort = new SerialPort(PAKSettingsManager.Settings.COMPortName, PAKSettingsManager.Settings.COMPortBandwidth);
-        }
-
-        public void SendSignalToDevice(Signal signal)
-        {
-            List<byte> bytesToSend = new List<byte>();            
-            bytesToSend.AddRange(PAKConversionUtilities.StringToByteArray(PAKSettingsManager.Settings.WriteSignalCommand));
-            byte[] signalHex = PAKConversionUtilities.StringToByteArray(signal.HexCode);
-            bytesToSend.AddRange(PAKConversionUtilities.Int32ToByteArray(signalHex.Length));
-            bytesToSend.AddRange(signalHex);
-            this.SendData(bytesToSend.ToArray());
-        }
+        }        
 
         public void SendMacrosToDevice(MacrosesContainer macrosesContainer)
         {
-            List<byte> bytesToSend = new List<byte>();
-            bytesToSend.AddRange(PAKConversionUtilities.StringToByteArray(PAKSettingsManager.Settings.WriteMacrosCommand));
-
-            
-
-            this.SendData(bytesToSend.ToArray());
+            this.SendData(PAKMacrosConverter.GetSignalByteRepresentation(macrosesContainer));
+            this.SendData(PAKMacrosConverter.GetMacrosesByteRepresentation(macrosesContainer));
         }
 
         public String SendData(String data)
@@ -117,6 +103,8 @@ namespace PAK_Command_Editor.HardwareInteractionModule
         }        
 
         #region Utilities        
+
+        
 
         #endregion
 

@@ -100,8 +100,7 @@ namespace PAK_Command_Editor.MacrosEditor
         public void SendMacrosToDevice()
         {
             if (this.MacrosConfigured)
-            {
-                this._hwModule.SendSignalToDevice(this.cbSelectSignal.SelectedItem as Signal);
+            {                
                 this._hwModule.SendMacrosToDevice(this._macrosesContainer);
             }
         }
@@ -420,7 +419,7 @@ namespace PAK_Command_Editor.MacrosEditor
             switch (commandType)
             {
                 case MacrosCommandType.SEND:
-                    Signal signal = this._signalsRepo.Get(x => x.Id.ToString().Equals(command.Params[0])).SingleOrDefault();
+                    Signal signal = this._signalsRepo.Get(x => x.HexCodeHash.Equals(command.Params[0])).SingleOrDefault();
                     return String.Format(SEND_PARAMS_TEMPLATE, signal.Name, command.Params[1]);
                 default:
                     return String.Join(";", command.Params.ToArray());

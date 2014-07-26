@@ -87,6 +87,7 @@
     <Compile Include="CustomEventArgs\ResultEntityEventArgs.cs" />
     <Compile Include="HardwareInteractionModule\COMTimer.cs" />
     <Compile Include="HardwareInteractionModule\PAKHardwareInteractionModule.cs" />
+    <Compile Include="HardwareInteractionModule\PAKMacrosConverter.cs" />
     <Compile Include="MacrosEditor\AddDelayCommandForm.cs">
       <SubType>Form</SubType>
     </Compile>

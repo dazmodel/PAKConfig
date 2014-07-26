@@ -28,10 +28,25 @@ namespace PAK_Command_Editor.Utilities
             return BitConverter.ToInt16(byteArray, 0);
         }
 
-        public static byte[] StringToByteArray(String hex)
+        public static byte[] StringToByteArray(String signalString)
         {
-            List<String> strBytes = hex.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+            List<String> strBytes = signalString.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
             return strBytes.Select(x => Convert.ToByte(x.Substring(2, 2), 16)).ToArray();
+        }
+
+        public static byte[] WordsStringToByteArray(String wordsString)
+        {
+            List<String> strBytes = wordsString.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            List<byte> bytes = new List<byte>();
+
+            foreach (String s in strBytes)
+            {
+                bytes.Add(Convert.ToByte(s.Substring(0, 2), 16));
+                bytes.Add(Convert.ToByte(s.Substring(2, 2), 16));
+            }
+
+            return bytes.ToArray();
         }
 
         public static byte[] StringToASCIIByteCodesArray(String value)
