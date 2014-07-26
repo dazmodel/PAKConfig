@@ -41,7 +41,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 29);
+            this.label1.Location = new System.Drawing.Point(15, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 0;
@@ -55,7 +55,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 100);
+            this.groupBox1.Size = new System.Drawing.Size(200, 51);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Параметры";
@@ -92,7 +92,7 @@
             // btnAddVar
             // 
             this.btnAddVar.Enabled = false;
-            this.btnAddVar.Location = new System.Drawing.Point(56, 118);
+            this.btnAddVar.Location = new System.Drawing.Point(56, 69);
             this.btnAddVar.Name = "btnAddVar";
             this.btnAddVar.Size = new System.Drawing.Size(75, 23);
             this.btnAddVar.TabIndex = 2;
@@ -102,7 +102,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(137, 118);
+            this.btnCancel.Location = new System.Drawing.Point(137, 69);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 3;
@@ -114,7 +114,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(225, 151);
+            this.ClientSize = new System.Drawing.Size(225, 105);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnAddVar);
             this.Controls.Add(this.groupBox1);

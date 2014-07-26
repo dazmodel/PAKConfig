@@ -192,7 +192,7 @@ namespace PAK_Command_Editor.MacrosEditor
             this.cbSelectTarget.Items.Clear();
 
             this.cbSelectTarget.Items.Add(SELECT_TEXT);
-            this.cbSelectTarget.Items.AddRange(this._pgvRepo.GetAll().Select(x => x.Alias).ToArray());
+            this.cbSelectTarget.Items.AddRange(this._pgvRepo.Get(x => x.CanReceiveSignals).Select(x => x.Alias).ToArray());
 
             this.cbSelectTarget.SelectedIndex = 0;
         }

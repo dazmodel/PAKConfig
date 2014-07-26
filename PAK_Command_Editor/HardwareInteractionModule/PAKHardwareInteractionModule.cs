@@ -3,6 +3,7 @@ using PAK_Command_Editor.CustomEventArgs;
 using PAK_Command_Editor.Entities;
 using PAK_Command_Editor.MacrosEditor;
 using PAK_Command_Editor.Settings;
+using PAK_Command_Editor.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -28,9 +29,9 @@ namespace PAK_Command_Editor.HardwareInteractionModule
         public void SendSignalToDevice(Signal signal)
         {
             List<byte> bytesToSend = new List<byte>();            
-            bytesToSend.AddRange(this.StringToByteArray(PAKSettingsManager.Settings.WriteSignalCommand));
-            byte[] signalHex = this.StringToByteArray(signal.HexCode);
-            bytesToSend.AddRange(this.IntToByteArray(signalHex.Length));
+            bytesToSend.AddRange(PAKConversionUtilities.StringToByteArray(PAKSettingsManager.Settings.WriteSignalCommand));
+            byte[] signalHex = PAKConversionUtilities.StringToByteArray(signal.HexCode);
+            bytesToSend.AddRange(PAKConversionUtilities.Int32ToByteArray(signalHex.Length));
             bytesToSend.AddRange(signalHex);
             this.SendData(bytesToSend.ToArray());
         }
@@ -38,7 +39,7 @@ namespace PAK_Command_Editor.HardwareInteractionModule
         public void SendMacrosToDevice(MacrosesContainer macrosesContainer)
         {
             List<byte> bytesToSend = new List<byte>();
-            bytesToSend.AddRange(this.StringToByteArray(PAKSettingsManager.Settings.WriteMacrosCommand));
+            bytesToSend.AddRange(PAKConversionUtilities.StringToByteArray(PAKSettingsManager.Settings.WriteMacrosCommand));
 
             this.SendData(bytesToSend.ToArray());
         }
@@ -113,26 +114,7 @@ namespace PAK_Command_Editor.HardwareInteractionModule
 
         }        
 
-        #region Utilities
-
-        private byte[] IntToByteArray(Int32 intValue)
-        {
-            byte[] intBytes = BitConverter.GetBytes(intValue);
-            if (BitConverter.IsLittleEndian)
-                System.Array.Reverse(intBytes);
-            return intBytes;
-        }
-
-        private byte[] StringToByteArray(String hex)
-        {            
-            List<String> strBytes = hex.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-            return strBytes.Select(x => Convert.ToByte(x.Substring(2, 2), 16)).ToArray();            
-        }
-
-        private byte[] StringToASCIIByteCodesArray(String value)
-        {
-            return Encoding.ASCII.GetBytes(value);
-        }
+        #region Utilities        
 
         #endregion
 

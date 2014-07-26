@@ -86,5 +86,14 @@ namespace PAK_Command_Editor.SignalsCatalog
                 this._dataSession.Dispose();
             }
         }
+
+        private void txtHexCode_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == (Keys.Control | Keys.A))
+            {
+                txtHexCode.SelectAll();
+                e.Handled = e.SuppressKeyPress = true;
+            }
+        }
     }
 }

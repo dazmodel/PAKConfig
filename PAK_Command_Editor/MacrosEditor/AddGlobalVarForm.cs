@@ -30,9 +30,8 @@ namespace PAK_Command_Editor.MacrosEditor
         }
 
         private void btnAddVar_Click(object sender, EventArgs e)
-        {
-            Boolean value = Convert.ToBoolean(this.cbGlobalVarValue.SelectedItem);
-            GlobalVariablesStorage.AddByName(this.txtGlobalVarAlias.Text, value);
+        {                        
+            GlobalVariablesStorage.AddByName(this.txtGlobalVarAlias.Text);
 
             if (this.GlobalVarAdded != null)
                 this.GlobalVarAdded(this, new ResultEntityEventArgs() { Params = new List<String>() { this.txtGlobalVarAlias.Text } });

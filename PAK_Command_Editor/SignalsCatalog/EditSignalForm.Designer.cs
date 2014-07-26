@@ -59,6 +59,7 @@
             this.txtHexCode.Size = new System.Drawing.Size(186, 136);
             this.txtHexCode.TabIndex = 2;
             this.txtHexCode.TextChanged += new System.EventHandler(this.txt_TextChanged);
+            this.txtHexCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtHexCode_KeyDown);
             // 
             // label2
             // 

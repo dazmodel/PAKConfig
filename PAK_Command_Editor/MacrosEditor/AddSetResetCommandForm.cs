@@ -1,4 +1,5 @@
 ﻿using PAK_Command_Editor.CustomEventArgs;
+using PAK_Command_Editor.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,7 +50,7 @@ namespace PAK_Command_Editor.MacrosEditor
 
             this.cbGlobalVars.Items.Clear();
             this.cbGlobalVars.Items.Add(new { Alias = SELECT_TEXT, HexCode = "-1" });
-            this.cbGlobalVars.Items.AddRange(GlobalVariablesStorage.GlobalVars.ToArray());
+            this.cbGlobalVars.Items.AddRange(GlobalVariablesStorage.GlobalVars.Where(x => !x.CanReceiveSignals).ToArray());
         }
 
         #endregion

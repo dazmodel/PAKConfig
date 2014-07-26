@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace PAK_Command_Editor.Repository
 {
-    public class Repository<T> : IRepository<T>
+    public class Repository<T> : IRepository<T>, IDisposable
     {
         private readonly ISession session;
 
@@ -47,6 +47,31 @@ namespace PAK_Command_Editor.Repository
         {
             session.Delete(entity);
         }
+
+        #region IDisposable Implementation
+
+        public void Dispose()
+        {
+            if (this.session == null) return;
+
+            try
+            {
+                if (this.session.Transaction.IsActive)
+                    this.session.Transaction.Commit();
+            }
+            catch (Exception)
+            {
+                if (this.session.Transaction.IsActive)
+                    this.session.Transaction.Rollback();
+            }
+            finally
+            {
+                this.session.Close();
+                this.session.Dispose();
+            }
+        }
+
+        #endregion
 
     }
 }

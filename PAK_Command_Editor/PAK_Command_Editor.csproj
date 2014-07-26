@@ -202,6 +202,7 @@
       <DependentUpon>SignalsCatalogViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SignalsCatalog\SignalViewEntity.cs" />
+    <Compile Include="Utilities\PAKConversionUtilities.cs" />
     <EmbeddedResource Include="MacrosEditor\AddDelayCommandForm.resx">
       <DependentUpon>AddDelayCommandForm.cs</DependentUpon>
     </EmbeddedResource>

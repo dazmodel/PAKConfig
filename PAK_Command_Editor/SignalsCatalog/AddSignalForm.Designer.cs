@@ -61,7 +61,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(341, 260);
+            this.groupBox1.Size = new System.Drawing.Size(341, 269);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Параметры сигнала";
@@ -106,6 +106,7 @@
             this.txtHexCode.Size = new System.Drawing.Size(234, 151);
             this.txtHexCode.TabIndex = 7;
             this.txtHexCode.TextChanged += new System.EventHandler(this.txtHexCode_TextChanged);
+            this.txtHexCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtHexCode_KeyDown);
             // 
             // label4
             // 
@@ -173,7 +174,7 @@
             // btnAddSignal
             // 
             this.btnAddSignal.Enabled = false;
-            this.btnAddSignal.Location = new System.Drawing.Point(197, 278);
+            this.btnAddSignal.Location = new System.Drawing.Point(197, 287);
             this.btnAddSignal.Name = "btnAddSignal";
             this.btnAddSignal.Size = new System.Drawing.Size(75, 23);
             this.btnAddSignal.TabIndex = 1;
@@ -183,7 +184,7 @@
             // 
             // btnCancelAdding
             // 
-            this.btnCancelAdding.Location = new System.Drawing.Point(278, 278);
+            this.btnCancelAdding.Location = new System.Drawing.Point(278, 287);
             this.btnCancelAdding.Name = "btnCancelAdding";
             this.btnCancelAdding.Size = new System.Drawing.Size(75, 23);
             this.btnCancelAdding.TabIndex = 2;
@@ -205,7 +206,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 313);
+            this.ClientSize = new System.Drawing.Size(365, 319);
             this.Controls.Add(this.btnAddVendor);
             this.Controls.Add(this.btnCancelAdding);
             this.Controls.Add(this.btnAddSignal);
