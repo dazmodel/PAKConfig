@@ -6,7 +6,7 @@ using System.Timers;
 
 namespace PAK_Command_Editor.HardwareInteractionModule
 {
-    public class COMTimer
+    public class COMTimer: IDisposable
     {
         public Timer tmrComm = new Timer();
         public bool timedout = false;
@@ -28,10 +28,19 @@ namespace PAK_Command_Editor.HardwareInteractionModule
 
         public void Start(double timeoutperiod)
         {
-            tmrComm.Interval = timeoutperiod;             //time to time out in milliseconds
+            tmrComm.Interval = timeoutperiod; //time to time out in milliseconds
             tmrComm.Stop();
             timedout = false;
             tmrComm.Start();
         }
+
+        #region IDisposable Implementation
+
+        public void Dispose()
+        {
+            this.tmrComm.Dispose();
+        }
+
+        #endregion
     }
 }

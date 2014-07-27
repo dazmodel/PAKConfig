@@ -7,6 +7,8 @@ namespace PAK_Command_Editor.Utilities
 {
     public static class PAKConversionUtilities
     {
+        #region To Byte Array Utils
+
         public static byte[] Int16ToByteArray(Int16 intValue)
         {
             byte[] intBytes = BitConverter.GetBytes(intValue);
@@ -21,12 +23,7 @@ namespace PAK_Command_Editor.Utilities
             if (BitConverter.IsLittleEndian)
                 System.Array.Reverse(intBytes);
             return intBytes;
-        }
-
-        public static Int16 ByteArrayToInt16(byte[] byteArray)
-        {
-            return BitConverter.ToInt16(byteArray, 0);
-        }
+        }        
 
         public static byte[] StringToByteArray(String signalString)
         {
@@ -50,9 +47,56 @@ namespace PAK_Command_Editor.Utilities
         }
 
         public static byte[] StringToASCIIByteCodesArray(String value)
-        {
+        {            
             return Encoding.ASCII.GetBytes(value);
         }
+
+        #endregion
+
+        #region From Byte Array Utils
+
+        public static Int16 ByteArrayToInt16(byte[] byteArray)
+        {
+            return ByteArrayToInt16(byteArray, 0);
+        }
+
+        public static Int16 ByteArrayToInt16(byte[] byteArray, Int32 startIndex)
+        {
+            return BitConverter.ToInt16(byteArray, startIndex);
+        }
+
+        public static Int32 ByteArrayToInt32(byte[] byteArray, Int32 startIndex)
+        {
+            return BitConverter.ToInt32(byteArray, startIndex);
+        }
+
+        public static String ByteArrayToSignalWordsString(byte[] byteArray)
+        {
+            return ByteArrayToSignalWordsString(byteArray, 0, byteArray.Length - 2);
+        }
+
+        public static String ByteArrayToSignalWordsString(byte[] byteArray, Int32 startIndex, Int32 length)
+        {            
+            StringBuilder wordSb = new StringBuilder();
+
+            for (Int32 i = startIndex; i < length; i++)
+            {
+                if ((i > 0) && (i % 2 == 0) && (i != byteArray.Length - 1))
+                {
+                    wordSb.Append(" ");
+                }
+                wordSb.Append(byteArray[i].ToString("X2"));
+            }
+
+            return wordSb.ToString();
+        }
+
+        public static String ASCIIByteArrayToString(byte[] byteArray, Int32 startIndex, Int32 count)
+        {
+            return Encoding.ASCII.GetString(byteArray, startIndex, count);
+        }
+
+        #endregion
 
         public static Int16 StringToInt16(String hex)
         {

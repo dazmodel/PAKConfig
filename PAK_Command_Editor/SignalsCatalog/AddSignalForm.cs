@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using PAK_Command_Editor.HardwareInteractionModule;
 using PAK_Command_Editor.Settings;
 using System.Collections.Generic;
+using PAK_Command_Editor.Utilities;
 
 namespace PAK_Command_Editor.SignalsCatalog
 {
@@ -87,16 +88,19 @@ namespace PAK_Command_Editor.SignalsCatalog
 
         private void btnTestSignal_Click(object sender, EventArgs e)
         {
-            String msgToSend = String.Format(COM_MSG_PATTERN, PAKSettingsManager.Settings.TestCommand,
-                                             this.txtHexCode.Text);
-            String result = this._hwModule.SendData(msgToSend);
-            MessageBox.Show(result);
+            MessageBox.Show(this._hwModule.SendTestCommand(this.txtHexCode.Text));
         }
 
         private void btnTeach_Click(object sender, EventArgs e)
         {
-            String result = this._hwModule.SendDataAndWait(PAKSettingsManager.Settings.TeachingCommand);
-            MessageBox.Show(result);
+            KeyValuePair<String, byte[]> result = this._hwModule.SendTeachCommand();
+
+            if (result.Value.Length > 0)
+            {
+                this.txtHexCode.Text = PAKConversionUtilities.ByteArrayToSignalWordsString(result.Value);
+            }
+
+            MessageBox.Show(result.Key);
         }
 
         private void btnAddVendor_Click(object sender, EventArgs e)
@@ -119,8 +123,8 @@ namespace PAK_Command_Editor.SignalsCatalog
         {
             Signal newSignal = new Signal();
             newSignal.Name = this.txtSignalName.Text;
-            newSignal.HexCode = this.txtHexCode.Text;
-            newSignal.HexCodeHash = newSignal.ComputeMD5Hash(newSignal.HexCode);
+            newSignal.HexCode = this.txtHexCode.Text.ToUpper();
+            newSignal.HexCodeHash = Signal.ComputeMD5Hash(newSignal.HexCode.ToUpper());
             this._currentDevice.AddSignal(newSignal);
 
             this._signalsRepo.SaveOrUpdate(newSignal);

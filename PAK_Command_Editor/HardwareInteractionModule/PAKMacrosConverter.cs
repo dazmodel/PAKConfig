@@ -12,6 +12,14 @@ namespace PAK_Command_Editor.HardwareInteractionModule
 {
     public static class PAKMacrosConverter
     {
+        private static readonly Int32 LENGTH_PREAMBLE_SIZE = 4;
+        private static readonly Int32 MIN_COMMANDS_LENGTH = 5;
+        private static readonly Int16 PARAM_SIZE = 4;
+        private static readonly Int16 PARAMS_CONTAINER_SIZE = 2;
+        private static readonly Int16 GLOBAL_VAR_SIZE = 2;
+        private static readonly Int16 SEND_PREAMBLE_SIZE = 8;
+        private static readonly Int16 SIGNAL_LENGTH_PART_SIZE = 4;
+
         public static byte[] GetSignalByteRepresentation(MacrosesContainer container)
         {
             List<byte> bytesToSend = new List<byte>();
@@ -38,6 +46,57 @@ namespace PAK_Command_Editor.HardwareInteractionModule
             bytesToSend.AddRange(PAKConversionUtilities.Int32ToByteArray(dataBytes.Count));
             bytesToSend.AddRange(dataBytes);
             return bytesToSend.ToArray();
+        }
+
+        public static Signal GetSignalFromByteRepresentation(byte[] signalData)
+        {
+            byte[] signalWithoutLengthData = TrimLengthPart(signalData);            
+            String signalHexHash = Signal.ComputeMD5Hash(PAKConversionUtilities.ByteArrayToSignalWordsString(signalWithoutLengthData));
+            Signal signal = null;
+            using (Repository<Signal> signalsRepo = new Repository<Signal>(PAKDataSessionFactory.GetSession()))
+            {
+                try
+                {
+                    signal = signalsRepo.Get(x => x.HexCodeHash.Equals(signalHexHash)).SingleOrDefault();
+                }
+                catch { }
+            }
+            return signal;
+        }
+
+        public static List<MacrosCommand> GetCommandsFromByteRepresentation(byte[] commandsData)
+        {
+            byte[] commandsWithoutLength = TrimLengthPart(commandsData);
+
+            if (commandsWithoutLength.Length >= MIN_COMMANDS_LENGTH)
+            {
+                List<MacrosCommand> commands = new List<MacrosCommand>();
+                Int32 index = 0;
+                do
+                {
+                    byte commandCode = commandsWithoutLength[index];
+                    index++;
+                    using (Repository<MacrosCommand> commandsRepo = new Repository<MacrosCommand>(PAKDataSessionFactory.GetSession()))
+                    {
+                        MacrosCommand command;
+                        try
+                        {
+                            command = commandsRepo.Get(x => x.HexCode == commandCode).SingleOrDefault();                            
+                            command.Params = GetParamsFromByteArray(command, commandsWithoutLength, ref index);
+                            commands.Add(command);
+                        }
+                        catch 
+                        {
+                            return null;
+                        }
+                    }
+
+                } while (index < commandsWithoutLength.Length);
+
+                return commands;
+            }
+
+            return null;
         }
 
         #region Utilities
@@ -85,6 +144,94 @@ namespace PAK_Command_Editor.HardwareInteractionModule
             }            
 
             return result.ToArray();
+        }
+
+        private static byte[] TrimLengthPart(byte[] data)
+        {
+            Int32 length = data.Length - LENGTH_PREAMBLE_SIZE;
+            byte[] inputWithoutLengthData = new byte[length];
+            Array.Copy(data, LENGTH_PREAMBLE_SIZE, inputWithoutLengthData, 0, length);
+            return inputWithoutLengthData;
+        }
+
+        private static List<String> GetParamsFromByteArray(MacrosCommand command, byte[] commandsData, ref Int32 index)
+        {
+            MacrosCommandType commnadType = (MacrosCommandType)Enum.Parse(typeof(MacrosCommandType), command.Alias);
+            List<String> parameters = new List<String>(PARAMS_CONTAINER_SIZE);
+
+            switch (commnadType)
+            {
+                case MacrosCommandType.DELAY:
+                    if (commandsData.Length >= (index + PARAM_SIZE))
+                    {
+                        Int32 delay = PAKConversionUtilities.ByteArrayToInt32(commandsData, index);
+                        index += PARAM_SIZE;
+                        parameters.Add(delay.ToString());
+                        break;
+                    }
+                    else
+                        return null;
+
+                case MacrosCommandType.SET:
+                case MacrosCommandType.RESET:
+                case MacrosCommandType.IF:
+                    if (commandsData.Length >= (index + PARAM_SIZE))
+                    {
+                        String globalVarAlias = PAKConversionUtilities.ASCIIByteArrayToString(commandsData, index, PARAM_SIZE);
+                        index += PARAM_SIZE;
+                        parameters.Add(globalVarAlias);
+                        break;
+                    }
+                    else
+                        return null;
+
+                case MacrosCommandType.SEND:
+                    return GetSendParamsFromByteArray(commandsData, ref index);
+                    
+            }
+            return parameters;
+        }
+
+        private static List<String> GetSendParamsFromByteArray(byte[] byteArray, ref Int32 index)
+        {
+            if (byteArray.Length >= (index + GLOBAL_VAR_SIZE + SEND_PREAMBLE_SIZE))
+            {
+                Int32 signalLength = PAKConversionUtilities.ByteArrayToInt32(byteArray, index + (SEND_PREAMBLE_SIZE - SIGNAL_LENGTH_PART_SIZE)) * 2 + SEND_PREAMBLE_SIZE;
+                if (byteArray.Length >= (index + signalLength))
+                {
+                    List<String> result = new List<String>();
+                    try
+                    {
+                        Int16 gvHexCode = PAKConversionUtilities.ByteArrayToInt16(byteArray, index);
+                        index += GLOBAL_VAR_SIZE;
+                        GlobalVariable gv;
+                        using (Repository<GlobalVariable> gvRepo = new Repository<GlobalVariable>(PAKDataSessionFactory.GetSession()))
+                        {
+                            gv = gvRepo.Get(x => x.HexCode == gvHexCode).SingleOrDefault();
+                        }
+
+                        String signalHexHash = Signal.ComputeMD5Hash(PAKConversionUtilities.ByteArrayToSignalWordsString(byteArray, index, signalLength));
+                        index += signalLength;
+                        Signal signal;
+                        using (Repository<Signal> signalsRepo = new Repository<Signal>(PAKDataSessionFactory.GetSession()))
+                        {
+                            signal = signalsRepo.Get(x => x.HexCodeHash.Equals(signalHexHash)).SingleOrDefault();
+                        }
+
+                        result.Add(gv.Alias);
+                        result.Add(signal.Name);
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+
+                    return result;
+                }
+                return null;
+            }
+
+            return null;
         }
 
         #endregion

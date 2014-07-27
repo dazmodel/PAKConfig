@@ -43,7 +43,11 @@ namespace PAK_Command_Editor.MacrosEditor
         private FormWindowState _prevWindowState;
 
         public String MacrosFileName { get; set; }
-        public Boolean UploadFromDeviceNeeded { get; set; }
+        public MacrosesContainer MacrosesContainer
+        {
+            get { return this._macrosesContainer; }
+            set { this._macrosesContainer = value; }
+        }
         public event EventHandler MacrosReadyToSave;
         public event EventHandler MacrosChanged;
 
@@ -145,12 +149,6 @@ namespace PAK_Command_Editor.MacrosEditor
 
         private void MacrosesEditorForm_Shown(object sender, EventArgs e)
         {
-            if (this.UploadFromDeviceNeeded)
-            {
-                this._hwModule.DataReceivedFromPort += _hwModule_DataReceivedFromPort;
-                this._hwModule.SendDataAndWait(PAKSettingsManager.Settings.ReadSignalCommand);
-            }
-
             this.ConfigureControls();
             this.BindVendors();
             this.cbVendors.SelectedIndex = 0;
@@ -323,22 +321,25 @@ namespace PAK_Command_Editor.MacrosEditor
 
         private void InitMacrosesContainer()
         {
-            if (!String.IsNullOrEmpty(this.MacrosFileName))
+            if (this._macrosesContainer == null)
             {
-                try
+                if (!String.IsNullOrEmpty(this.MacrosFileName))
                 {
-                    this._macrosesContainer = MacrosesContainer.GetFromFile(this.MacrosFileName);                    
+                    try
+                    {
+                        this._macrosesContainer = MacrosesContainer.GetFromFile(this.MacrosFileName);
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message, ERROR);
+                        this.Close();
+                    }
                 }
-                catch (Exception e)
+                else
                 {
-                    MessageBox.Show(e.Message, ERROR);
-                    this.Close();
+                    this._macrosesContainer = new MacrosesContainer();
                 }
-            }
-            else
-            {
-                this._macrosesContainer = new MacrosesContainer();
-            }
+            }            
         }
 
         private void RestoreState()

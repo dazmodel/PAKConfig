@@ -12,7 +12,7 @@ namespace PAK_Command_Editor.Entities
         public virtual String HexCode { get; set; }
         public virtual Device Device { get; set; }
 
-        public virtual String ComputeMD5Hash(String hexCode)
+        public static String ComputeMD5Hash(String hexCode)
         {
             String hashStrig = String.Empty;
 

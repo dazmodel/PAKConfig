@@ -1,9 +1,11 @@
 ﻿using NHibernate;
+using PAK_Command_Editor.HardwareInteractionModule;
 using PAK_Command_Editor.MacrosEditor;
 using PAK_Command_Editor.Repository;
 using PAK_Command_Editor.Settings;
 using PAK_Command_Editor.SignalsCatalog;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace PAK_Command_Editor
@@ -83,16 +85,27 @@ namespace PAK_Command_Editor
 
         private void readMacrosFromDeviceMenuItem_Click(object sender, EventArgs e)
         {
-            MacrosesEditorForm macrosEditor = new MacrosesEditorForm();
-            macrosEditor.MdiParent = this;
-            macrosEditor.FormClosing += macrosEditor_FormClosing;
-            macrosEditor.MacrosChanged += macrosEditor_MacrosChanged;
-            macrosEditor.MacrosReadyToSave += macrosEditor_MacrosReadyToSave;
-            macrosEditor.UploadFromDeviceNeeded = true;
-            macrosEditor.Show();
+            KeyValuePair<String, MacrosesContainer> readedMacros;
+            using (PAKHardwareInteractionModule hwModule = new PAKHardwareInteractionModule())
+            {
+                readedMacros = hwModule.ReadMacrosFromDevice();
+            }
 
-            this.exportMacrosMenuItem.Enabled = true;
-            this._macrosesEditor = macrosEditor;
+            MessageBox.Show(readedMacros.Key);
+
+            if (readedMacros.Value != null)
+            {
+                MacrosesEditorForm macrosEditor = new MacrosesEditorForm();
+                macrosEditor.MdiParent = this;
+                macrosEditor.FormClosing += macrosEditor_FormClosing;
+                macrosEditor.MacrosChanged += macrosEditor_MacrosChanged;
+                macrosEditor.MacrosReadyToSave += macrosEditor_MacrosReadyToSave;
+                macrosEditor.MacrosesContainer = readedMacros.Value;
+                macrosEditor.Show();
+
+                this.exportMacrosMenuItem.Enabled = true;
+                this._macrosesEditor = macrosEditor;
+            }
         }
 
         private void loadMacrosToDeviceMenuItem_Click(object sender, EventArgs e)
