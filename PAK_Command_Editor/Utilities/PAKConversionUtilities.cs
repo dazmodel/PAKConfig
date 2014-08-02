@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PAK_Command_Editor.HardwareInteractionModule;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,8 +48,11 @@ namespace PAK_Command_Editor.Utilities
         }
 
         public static byte[] StringToASCIIByteCodesArray(String value)
-        {            
-            return Encoding.ASCII.GetBytes(value);
+        {
+            byte[] strArr = Encoding.ASCII.GetBytes(value);
+            byte[] result = new byte[PAKMacrosConverter.STR_PARAM_SIZE];
+            Array.Copy(strArr, 0, result, 0, strArr.Length);
+            return result;
         }
 
         #endregion
@@ -62,12 +66,18 @@ namespace PAK_Command_Editor.Utilities
 
         public static Int16 ByteArrayToInt16(byte[] byteArray, Int32 startIndex)
         {
-            return BitConverter.ToInt16(byteArray, startIndex);
+            byte[] tmpArr = new byte[sizeof(Int16)];
+            Array.Copy(byteArray, startIndex, tmpArr, 0, sizeof(Int16));
+            Array.Reverse(tmpArr);
+            return BitConverter.ToInt16(tmpArr, 0);
         }
 
         public static Int32 ByteArrayToInt32(byte[] byteArray, Int32 startIndex)
         {
-            return BitConverter.ToInt32(byteArray, startIndex);
+            byte[] tmpArr = new byte[sizeof(Int32)];
+            Array.Copy(byteArray, startIndex, tmpArr, 0, sizeof(Int32));
+            Array.Reverse(tmpArr);
+            return BitConverter.ToInt32(tmpArr, 0);
         }
 
         public static String ByteArrayToSignalWordsString(byte[] byteArray)
@@ -78,14 +88,15 @@ namespace PAK_Command_Editor.Utilities
         public static String ByteArrayToSignalWordsString(byte[] byteArray, Int32 startIndex, Int32 length)
         {            
             StringBuilder wordSb = new StringBuilder();
-
-            for (Int32 i = startIndex; i < length; i++)
+            byte[] tmpArr = new byte[length];
+            Array.Copy(byteArray, startIndex, tmpArr, 0, length);
+            for (Int32 i = 0; i < length; i++)
             {
-                if ((i > 0) && (i % 2 == 0) && (i != byteArray.Length - 1))
+                if ((i > 0) && (i % 2 == 0) && (i != tmpArr.Length - 1))
                 {
                     wordSb.Append(" ");
                 }
-                wordSb.Append(byteArray[i].ToString("X2"));
+                wordSb.Append(tmpArr[i].ToString("X2"));
             }
 
             return wordSb.ToString();

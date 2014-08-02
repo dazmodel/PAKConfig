@@ -56,6 +56,17 @@ namespace PAK_Command_Editor.HardwareInteractionModule
         {
             this.SendData(PAKMacrosConverter.GetSignalByteRepresentation(macrosesContainer));
             this.SendData(PAKMacrosConverter.GetMacrosesByteRepresentation(macrosesContainer));
+                        
+            //List<byte> signalBytes = PAKMacrosConverter.GetSignalByteRepresentation(macrosesContainer).ToList();
+            //signalBytes.Add(byte.MinValue);
+            //signalBytes.Add(byte.MinValue);
+            //List<byte> macrosBytes = PAKMacrosConverter.GetMacrosesByteRepresentation(macrosesContainer).ToList();
+           
+            //MacrosesContainer mc = new MacrosesContainer();
+            //mc.AssociatedSignal = PAKMacrosConverter.GetSignalFromByteRepresentation(signalBytes.Where(x => signalBytes.IndexOf(x) >= 2).ToArray());
+            //byte[] tmp = new byte[macrosBytes.Count - 2];
+            //System.Array.Copy(macrosBytes.ToArray(), 2, tmp, 0, macrosBytes.Count - 2);
+            //mc.Commands = PAKMacrosConverter.GetCommandsFromByteRepresentation(tmp);
         }
 
         public KeyValuePair<String, MacrosesContainer> ReadMacrosFromDevice()

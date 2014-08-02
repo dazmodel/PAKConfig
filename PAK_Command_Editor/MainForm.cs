@@ -6,6 +6,7 @@ using PAK_Command_Editor.Settings;
 using PAK_Command_Editor.SignalsCatalog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace PAK_Command_Editor
