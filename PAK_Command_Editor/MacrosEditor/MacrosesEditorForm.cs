@@ -105,9 +105,8 @@ namespace PAK_Command_Editor.MacrosEditor
         public void SendMacrosToDevice()
         {
             if (this.MacrosConfigured)
-            {                
-                this._hwModule.SendMacrosToDevice(this._macrosesContainer);
-                MessageBox.Show(MACROS_WAS_SENT);
+            {
+                MessageBox.Show(this._hwModule.SendMacrosToDevice(this._macrosesContainer));
             }
         }
 

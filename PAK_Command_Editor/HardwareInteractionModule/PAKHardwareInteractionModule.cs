@@ -52,9 +52,9 @@ namespace PAK_Command_Editor.HardwareInteractionModule
             return this.SendDataAndWait(PAKConversionUtilities.StringToByteArray(PAKSettingsManager.Settings.TeachingCommand));
         }
 
-        public void SendMacrosToDevice(MacrosesContainer macrosesContainer)
+        public String SendMacrosToDevice(MacrosesContainer macrosesContainer)
         {
-            this.SendData(PAKMacrosConverter.GetSignalByteRepresentation(macrosesContainer));
+            return this.SendData(PAKMacrosConverter.GetSignalByteRepresentation(macrosesContainer)) + "\r\n" +
             this.SendData(PAKMacrosConverter.GetMacrosesByteRepresentation(macrosesContainer));
                         
             //List<byte> signalBytes = PAKMacrosConverter.GetSignalByteRepresentation(macrosesContainer).ToList();
