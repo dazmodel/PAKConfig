@@ -27,6 +27,7 @@ namespace PAK_Command_Editor.MacrosEditor
         private static readonly String SEND_PARAMS_TEMPLATE = "Сигнал: {0}, Адресат: {1}";
         private static readonly String CANCEL_WRN_CAPTION = "Закрытие редактора макросов";
         private static readonly String CANCEL_WARNING = "Все несохраненные изменения будут потеряны. Закрыть редактор?";
+        private static readonly String MACROS_WAS_SENT = "Текущий макрос успешно отправлен в порт " + PAKSettingsManager.Settings.COMPortName;
         private ISession _dataSession;
         private IRepository<Vendor> _vendorsRepo;
         private IRepository<Device> _devsRepo;
@@ -106,6 +107,7 @@ namespace PAK_Command_Editor.MacrosEditor
             if (this.MacrosConfigured)
             {                
                 this._hwModule.SendMacrosToDevice(this._macrosesContainer);
+                MessageBox.Show(MACROS_WAS_SENT);
             }
         }
 
