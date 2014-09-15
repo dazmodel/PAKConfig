@@ -37,19 +37,19 @@ namespace PAK_Command_Editor.HardwareInteractionModule
             List<byte> bytesToSend = new List<byte>();
             bytesToSend.AddRange(PAKConversionUtilities.StringToByteArray(PAKSettingsManager.Settings.TestCommand));
             bytesToSend.AddRange(PAKConversionUtilities.WordsStringToByteArray(signalString));
-            bytesToSend.AddRange(PAKConversionUtilities.StringToASCIIByteCodesArray(EOL));
+            //bytesToSend.AddRange(PAKConversionUtilities.StringToASCIIByteCodesArray(EOL));
 
             return this.SendData(bytesToSend.ToArray());
         }
 
         public KeyValuePair<String, byte[]> SendTeachCommand()
         {
-            //String testSignal = "0000 0067 0000 0015 0060 0018 0018 0018 0030 0018 0030 0018 0030 0018 0018 0018 0030 0018 0018 0018 0018 0018 0030 0018 0018 0018 0030 0018 0030 0018 0030 0018 0018 0018 0018 0018 0030 0018 0018 0018 0018 0018 0030 0018 0018 03f6";
-            //List<byte> bytes = new List<byte>();
-            //bytes.AddRange(PAKConversionUtilities.WordsStringToByteArray(testSignal));
-            //bytes.AddRange(PAKConversionUtilities.StringToASCIIByteCodesArray(EOL));
-            //return new KeyValuePair<string, byte[]>("OK", bytes.ToArray());
-            return this.SendDataAndWait(PAKConversionUtilities.StringToByteArray(PAKSettingsManager.Settings.TeachingCommand));
+            String testSignal = "0000 0067 0000 0015 0060 0018 0018 0018 0030 0018 0030 0018 0030 0018 0018 0018 0030 0018 0018 0018 0018 0018 0030 0018 0018 0018 0030 0018 0030 0018 0030 0018 0018 0018 0018 0018 0030 0018 0018 0018 0018 0018 0030 0018 0018 03f6";
+            List<byte> bytes = new List<byte>();
+            bytes.AddRange(PAKConversionUtilities.WordsStringToByteArray(testSignal));
+            bytes.AddRange(PAKConversionUtilities.StringToASCIIByteCodesArray(EOL));
+            return new KeyValuePair<string, byte[]>("OK", bytes.ToArray());
+            //return this.SendDataAndWait(PAKConversionUtilities.StringToByteArray(PAKSettingsManager.Settings.TeachingCommand));
         }
 
         public String SendMacrosToDevice(MacrosesContainer macrosesContainer)
